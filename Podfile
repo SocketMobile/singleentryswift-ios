@@ -1,6 +1,6 @@
 
 def import_pods
-    pod "ScanAPI", :path=> "../ScanApiSDK-10.2.218"
+    pod "ScanAPI", :path=> "../ScanApiSDK-10.2.219"
 end
 
 platform :ios, '7.1'
