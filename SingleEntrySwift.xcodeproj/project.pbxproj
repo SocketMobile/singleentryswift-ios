@@ -15,6 +15,7 @@
 		679FF04B1A1A83C900510266 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 679FF0491A1A83C900510266 /* LaunchScreen.xib */; };
 		679FF0571A1A83C900510266 /* SingleEntrySwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679FF0561A1A83C900510266 /* SingleEntrySwiftTests.swift */; };
 		ABE54AF9D9E92D4889B2D636 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CFD766998EE3DC77A8DFB7E /* libPods.a */; };
+		E744CF421BDFDD700090F8C0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E744CF411BDFDD700090F8C0 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		679FF0561A1A83C900510266 /* SingleEntrySwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleEntrySwiftTests.swift; sourceTree = "<group>"; };
 		67E0EDD41A2FA97500391E18 /* SingleEntrySwift-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SingleEntrySwift-Bridging-Header.h"; sourceTree = "<group>"; };
 		E31EC30A501CA7C7965DA6A3 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		E744CF411BDFDD700090F8C0 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				679FF03E1A1A83C900510266 /* AppDelegate.swift */,
 				679FF0401A1A83C900510266 /* MasterViewController.swift */,
 				679FF0421A1A83C900510266 /* DetailViewController.swift */,
+				E744CF411BDFDD700090F8C0 /* SettingsViewController.swift */,
 				679FF0441A1A83C900510266 /* Main.storyboard */,
 				679FF0471A1A83C900510266 /* Images.xcassets */,
 				679FF0491A1A83C900510266 /* LaunchScreen.xib */,
@@ -297,6 +300,7 @@
 				679FF0431A1A83C900510266 /* DetailViewController.swift in Sources */,
 				679FF0411A1A83C900510266 /* MasterViewController.swift in Sources */,
 				679FF03F1A1A83C900510266 /* AppDelegate.swift in Sources */,
+				E744CF421BDFDD700090F8C0 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
