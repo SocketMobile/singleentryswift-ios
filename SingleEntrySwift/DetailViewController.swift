@@ -35,7 +35,6 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         softScanTrigger.hidden = true;
-        displayScanners()
 
     }
     
@@ -48,6 +47,7 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
             ScanApiHelper.sharedScanApiHelper().pushDelegate(self)
         }
         showSoftScanOverlay = false
+        displayScanners()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -59,6 +59,7 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
             // the deviceArrival for each connected scanner once this view
             // becomes active again
             scanners = []
+            softScanTrigger.hidden = true;
             ScanApiHelper.sharedScanApiHelper().popDelegate(self)
         }
     }

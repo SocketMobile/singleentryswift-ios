@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Master-->
@@ -33,45 +34,61 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cGj-j5-Qz1">
-                                <rect key="frame" x="16" y="261" width="568" height="30"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cGj-j5-Qz1">
+                                <rect key="frame" x="20" y="231" width="560" height="30"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Status:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ymC-oB-eyO">
-                                <rect key="frame" x="16" y="93" width="55" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ymC-oB-eyO">
+                                <rect key="frame" x="20" y="93" width="54" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je2-rg-QBo">
-                                <rect key="frame" x="16" y="144" width="568" height="91"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="je2-rg-QBo">
+                                <rect key="frame" x="20" y="131" width="560" height="82"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ohl-ZP-qcK">
-                                <rect key="frame" x="262" y="376" width="76" height="30"/>
-                                <animations/>
-                                <state key="normal" title="Settings"/>
-                                <connections>
-                                    <segue destination="JDr-O6-Wkd" kind="show" id="qZn-r3-htF"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MsW-oX-P8f">
-                                <rect key="frame" x="103" y="376" width="124" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MsW-oX-P8f">
+                                <rect key="frame" x="0.0" y="334" width="461" height="30"/>
                                 <animations/>
                                 <state key="normal" title="SoftScan trigger"/>
                                 <connections>
                                     <action selector="onSoftScanTrigger:" destination="JEX-9P-axG" eventType="touchUpInside" id="5dQ-Nr-EEQ"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ohl-ZP-qcK">
+                                <rect key="frame" x="0.0" y="281" width="560" height="34"/>
+                                <animations/>
+                                <state key="normal" title="Settings"/>
+                                <connections>
+                                    <segue destination="JDr-O6-Wkd" kind="show" id="qZn-r3-htF"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="je2-rg-QBo" secondAttribute="trailing" id="231-GL-yYk"/>
+                            <constraint firstItem="MsW-oX-P8f" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="2Kh-gb-fuE"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MsW-oX-P8f" secondAttribute="trailing" id="AUY-hn-YkO"/>
+                            <constraint firstItem="je2-rg-QBo" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="100" id="M0o-Uc-9we"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="je2-rg-QBo" secondAttribute="leading" id="Qsi-Ml-LvP"/>
+                            <constraint firstItem="ymC-oB-eyO" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="29" id="UhY-fT-yb4"/>
+                            <constraint firstItem="Ohl-ZP-qcK" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="217" id="Wx5-cq-GHW"/>
+                            <constraint firstItem="MsW-oX-P8f" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="270" id="f2q-Ev-lgQ"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="ymC-oB-eyO" secondAttribute="leading" id="gZV-Au-Lk7"/>
+                            <constraint firstItem="Ohl-ZP-qcK" firstAttribute="leading" secondItem="svH-Pt-448" secondAttribute="leadingMargin" id="hYA-Jr-Za9"/>
+                            <constraint firstItem="cGj-j5-Qz1" firstAttribute="top" secondItem="SYR-Wa-9uf" secondAttribute="bottom" constant="167" id="j6O-xV-FzP"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ohl-ZP-qcK" secondAttribute="trailing" id="mky-Lu-KbK"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="cGj-j5-Qz1" secondAttribute="leading" id="tlj-O9-Kz3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="cGj-j5-Qz1" secondAttribute="trailing" id="zab-Dd-MiG"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="SingleEntry" id="mOI-FS-AaM"/>
@@ -83,7 +100,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="709" y="209"/>
+            <point key="canvasLocation" x="795" y="178"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Nki-YV-4Qg">
