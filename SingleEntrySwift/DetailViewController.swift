@@ -21,28 +21,61 @@ import UIKit
 
 class DetailViewController: UIViewController,ScanApiHelperDelegate {
     let noScannerConnected = "No scanner connected"
-    var scanners : [NSString] = []
+    var scanners : [NSString] = []  // keep a list of scanners to display in the status
+    var softScanner : DeviceInfo?  // keep a reference on the SoftScan Scanner
+    
     @IBOutlet weak var connectionStatus: UILabel!
     @IBOutlet weak var decodedData: UITextField!
+    @IBOutlet weak var softScanTrigger: UIButton!
 
     var detailItem: AnyObject?
-
+    var showSoftScanOverlay = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        ScanApiHelper.sharedScanApiHelper().pushDelegate(self)
+        softScanTrigger.hidden = true;
         displayScanners()
 
     }
-
-    override func viewDidDisappear(animated: Bool) {
-        ScanApiHelper.sharedScanApiHelper().popDelegate(self)
+    
+    override func viewDidAppear(animated: Bool) {
+        // if we are showing the SoftScan Overlay view we don't
+        // want to push our delegate again when our view becomes active
+        if showSoftScanOverlay == false {
+            // since we use ScanApiHelper in shared mode, we push this
+            // view controller delegate to the ScanApiHelper delegates stack
+            ScanApiHelper.sharedScanApiHelper().pushDelegate(self)
+        }
+        showSoftScanOverlay = false
     }
+    
+    override func viewDidDisappear(animated: Bool) {
+        // if we are showing the SoftScan Overlay view we don't
+        // want to remove our delegate from the ScanApiHelper delegates stack
+        if showSoftScanOverlay == false {
+            // remove all the scanner names from the list
+            // because in ScanApiHelper shared mode we will receive again
+            // the deviceArrival for each connected scanner once this view
+            // becomes active again
+            scanners = []
+            ScanApiHelper.sharedScanApiHelper().popDelegate(self)
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func onSoftScanTrigger(sender: AnyObject) {
+        if let scanner = softScanner as DeviceInfo! {
+            showSoftScanOverlay = true
+            ScanApiHelper.sharedScanApiHelper().postSetTriggerDevice(scanner, action: UInt8(kSktScanTriggerStart), target: self, response: "onSetTrigger:")
+        }
+    }
+    
+    // MARK: - Utility functions
     func displayScanners(){
         if let status = connectionStatus {
             status.text = ""
@@ -55,6 +88,33 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
         }
     }
 
+    func displayErrorAlert(result: SKTRESULT, operation : String){
+        if result != ESKT_NOERROR {
+            let errorTxt = "Error \(result) while doing a \(operation)"
+            let alert = UIAlertController(title: "ScanAPI Error", message: errorTxt, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    // MARK: - ScanApi complete callbacks
+    
+    // display an error message if the setTrigger failed
+    // and reset the showSoftScanOverlay
+    func onSetTrigger(scanObj : ISktScanObject){
+        let result = scanObj.Msg().Result()
+        displayErrorAlert(result, operation: "SetTrigger")
+        if result != ESKT_NOERROR {
+            showSoftScanOverlay = false
+        }
+    }
+    
+    // display an error message if the setOverlayView failed
+    func onSetOverlayView(scanObj: ISktScanObject){
+        let result = scanObj.Msg().Result()
+        displayErrorAlert(result, operation: "SetOverlayView")
+    }
+    
     // MARK: - ScanApiHelperDelegate
 
     func onDecodedDataResult(result: Int, device: DeviceInfo!, decodedData: ISktScanDecodedData!) {
@@ -72,8 +132,23 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
         }
     }
 
+    // since we use ScanApiHelper in shared mode, we receive a device Arrival
+    // each time this view becomes active and there is a scanner connected
     func onDeviceArrival(result: SKTRESULT, device deviceInfo: DeviceInfo!) {
         print("onDeviceArrival in the detail view")
+        let name = deviceInfo.getName()
+        if(name.caseInsensitiveCompare("SoftScanner") == NSComparisonResult.OrderedSame){
+            softScanTrigger.hidden = false;
+            softScanner = deviceInfo
+            
+            // set the Overlay View context to give a reference to this controller
+            if let scanner = softScanner as DeviceInfo! {
+                let context : NSDictionary = [
+                    String.fromCString(kSktScanSoftScanContext)! : self
+                ]
+                ScanApiHelper.sharedScanApiHelper().postSetOverlayView(scanner, overlayView: context, target: self, response: "onSetOverlayView:")
+            }
+        }
         scanners.append(deviceInfo.getName())
         displayScanners()
     }
@@ -84,6 +159,13 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
         for scanner in scanners{
             if(scanner != deviceRemoved.getName()){
                 newScanners.append(scanner as String)
+            }
+        }
+        // if the scanner that is removed is SoftScan then
+        // we nil its reference
+        if softScanner != nil {
+            if softScanner == deviceRemoved {
+                softScanner = nil
             }
         }
         scanners=newScanners

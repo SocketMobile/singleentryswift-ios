@@ -61,6 +61,14 @@
                                     <segue destination="JDr-O6-Wkd" kind="show" id="qZn-r3-htF"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MsW-oX-P8f">
+                                <rect key="frame" x="103" y="376" width="124" height="30"/>
+                                <animations/>
+                                <state key="normal" title="SoftScan trigger"/>
+                                <connections>
+                                    <action selector="onSoftScanTrigger:" destination="JEX-9P-axG" eventType="touchUpInside" id="5dQ-Nr-EEQ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -70,6 +78,7 @@
                     <connections>
                         <outlet property="connectionStatus" destination="je2-rg-QBo" id="aFy-Zf-zUc"/>
                         <outlet property="decodedData" destination="cGj-j5-Qz1" id="Z9j-d7-3cj"/>
+                        <outlet property="softScanTrigger" destination="MsW-oX-P8f" id="fct-Gm-SzZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
