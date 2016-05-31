@@ -1,8 +1,8 @@
 
 def import_pods
-    pod "ScanAPI", :path=> "../ScanApiSDK-10.2.227"
+    pod "ScanAPI", :path=> "../ScanApiSDK-10.3.36"
 end
 
 platform :ios, '7.1'
-xcodeproj 'SingleEntrySwift.xcodeproj'
+target 'SingleEntrySwift'
 import_pods
