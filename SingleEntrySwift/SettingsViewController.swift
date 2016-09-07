@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
         // Do any additional setup after loading the view.
         
         // retrieve the current status of SoftScan
-        ScanApiHelper.sharedScanApiHelper().postGetSoftScanStatus(self, response: "onGetSoftScanStatus:")
+        ScanApiHelper.sharedScanApiHelper().postGetSoftScanStatus(self, response: #selector(SettingsViewController.onGetSoftScanStatus(_:)))
     }
 
     override func viewDidDisappear(animated: Bool) {
@@ -36,11 +36,11 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     @IBAction func changeSoftScan(sender: AnyObject) {
         if(!softscan.on){
             print("disabling SoftScan...")
-            ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanDisableSoftScan), target: self, response: "onSetSoftScanStatus:")
+            ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanDisableSoftScan), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
         }
         else{
             print("enabling SoftScan...")
-            ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanEnableSoftScan), target: self, response: "onSetSoftScanStatus:")
+            ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanEnableSoftScan), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
         }
     }
     
@@ -68,7 +68,7 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
             else{
                 softscan.on = false
                 if(status == kSktScanSoftScanNotSupported){
-                    ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanSoftScanSupported), target: self, response: "onSetSoftScanStatus:")
+                    ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanSoftScanSupported), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
                 }
             }
         }

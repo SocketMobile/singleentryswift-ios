@@ -64,7 +64,7 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
         // Do any additional setup after loading the view, typically from a nib.
 
         // setup ScanAPI
-        scanApiHelperConsumer=NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: Selector("onScanApiHelperConsumer"), userInfo: nil, repeats: true)
+        scanApiHelperConsumer=NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(MasterViewController.onScanApiHelperConsumer), userInfo: nil, repeats: true)
         // there is now a stack of delegates the last push is the
         // delegate active, when a new view requiring notifications from the
         // scanner, then push its delegate and pop its delegate when the

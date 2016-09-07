@@ -72,7 +72,7 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
     @IBAction func onSoftScanTrigger(sender: AnyObject) {
         if let scanner = softScanner as DeviceInfo! {
             showSoftScanOverlay = true
-            ScanApiHelper.sharedScanApiHelper().postSetTriggerDevice(scanner, action: UInt8(kSktScanTriggerStart), target: self, response: "onSetTrigger:")
+            ScanApiHelper.sharedScanApiHelper().postSetTriggerDevice(scanner, action: UInt8(kSktScanTriggerStart), target: self, response: #selector(DetailViewController.onSetTrigger(_:)))
         }
     }
     
@@ -147,7 +147,7 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
                 let context : NSDictionary = [
                     String.fromCString(kSktScanSoftScanContext)! : self
                 ]
-                ScanApiHelper.sharedScanApiHelper().postSetOverlayView(scanner, overlayView: context, target: self, response: "onSetOverlayView:")
+                ScanApiHelper.sharedScanApiHelper().postSetOverlayView(scanner, overlayView: context, target: self, response: #selector(DetailViewController.onSetOverlayView(_:)))
             }
         }
         scanners.append(deviceInfo.getName())
