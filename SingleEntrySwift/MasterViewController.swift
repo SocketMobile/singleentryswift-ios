@@ -47,13 +47,13 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
     // OTHERWISE WE COULD HAVE JUST USE:
     // scanApiHelper = ScanApiHelper()
     // IF WE DON'T NEED ScanApiHelper IN OTHER VIEWS
-    var scanApiHelper = ScanApiHelper.sharedScanApiHelper()
-    var scanApiHelperConsumer = NSTimer()
+    var scanApiHelper = ScanApiHelper.shared()
+    var scanApiHelperConsumer = Timer()
 
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             self.clearsSelectionOnViewWillAppear = false
             self.preferredContentSize = CGSize(width: 320.0, height: 600.0)
         }
@@ -64,18 +64,18 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
         // Do any additional setup after loading the view, typically from a nib.
 
         // setup ScanAPI
-        scanApiHelperConsumer=NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(MasterViewController.onScanApiHelperConsumer), userInfo: nil, repeats: true)
+        scanApiHelperConsumer=Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(MasterViewController.onScanApiHelperConsumer), userInfo: nil, repeats: true)
         // there is now a stack of delegates the last push is the
         // delegate active, when a new view requiring notifications from the
         // scanner, then push its delegate and pop its delegate when the
         // view is done
-        scanApiHelper.pushDelegate(self)
-        scanApiHelper.open()
+        scanApiHelper?.push(self)
+        scanApiHelper?.open()
 
         // add SingleEntry item from the begining in the main list
-        objects.insertObject("SingleEntry", atIndex: 0);
-        let indexPath=NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        objects.insert("SingleEntry", at: 0);
+        let indexPath=IndexPath(row: 0, section: 0)
+        self.tableView.insertRows(at: [indexPath], with: .automatic)
 
 
     }
@@ -85,21 +85,21 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
         // Dispose of any resources that can be recreated.
     }
 
-    func insertNewObject(sender: AnyObject) {
-        objects.insertObject(NSDate(), atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+    func insertNewObject(_ sender: AnyObject) {
+        objects.insert(Date(), at: 0)
+        let indexPath = IndexPath(row: 0, section: 0)
+        self.tableView.insertRows(at: [indexPath], with: .automatic)
     }
 
     // MARK: - Segues
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow {
-                if let object = objects[indexPath.row] as? NSString {
-                    let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
+                if let object = objects[(indexPath as NSIndexPath).row] as? NSString {
+                    let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
                     controller.detailItem = object
-                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                    controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem
                     controller.navigationItem.leftItemsSupplementBackButton = true
                 }
             }
@@ -108,51 +108,51 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
 
     // MARK: - Table View
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return objects.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as UITableViewCell
 
         var description = "dont know"
-        if let object = objects[indexPath.row] as? NSString {
+        if let object = objects[(indexPath as NSIndexPath).row] as? NSString {
             description=object as String;
         }
         cell.textLabel?.text = description
         return cell
     }
 
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return false
     }
 
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            objects.removeObjectAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            objects.removeObject(at: (indexPath as NSIndexPath).row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
 
     // MARK: - ScanApiHelper Consumer
     func onScanApiHelperConsumer(){
-        scanApiHelper.doScanApiReceive()
+        scanApiHelper?.doScanApiReceive()
     }
 
     // MARK: - ScanApiHelperDelegate
 
-    func onDeviceArrival(result: SKTRESULT, device deviceInfo: DeviceInfo!) {
+    func onDeviceArrival(_ result: SKTRESULT, device deviceInfo: DeviceInfo!) {
         print("Main view device arrival:\(deviceInfo.getName())")
     }
 
-    func onDeviceRemoval(deviceRemoved: DeviceInfo!) {
+    func onDeviceRemoval(_ deviceRemoved: DeviceInfo!) {
         print("Main view device removal:\(deviceRemoved.getName())")
     }
 
@@ -171,28 +171,28 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
     // from the scanner. This one has a result field that should be checked before
     // using the decoded data. It would be set to ESKT_CANCEL if the user
     // taps on the cancel button in the SoftScan View Finder
-    func onDecodedDataResult(result: Int, device: DeviceInfo!, decodedData: ISktScanDecodedData!) {
+    func onDecodedDataResult(_ result: Int, device: DeviceInfo!, decodedData: ISktScanDecodedData!) {
         if result==ESKT_NOERROR {
             let rawData = decodedData.getData()
-            let rawDataSize = decodedData.getDataSize()
-            let data = NSData(bytes: rawData, length: Int(rawDataSize))
+            let rawDataSize = decodedData.getSize()
+            let data = Data(bytes: UnsafePointer<UInt8>(rawData!), count: Int(rawDataSize))
             print("Size: \(rawDataSize)")
             print("data: \(data)")
-            let str = NSString(data: data, encoding: NSUTF8StringEncoding)
+            let str = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
             let string = str as! String
             print("Decoded Data \(string)")
         }
     }
 
-    func onError(result: SKTRESULT) {
+    func onError(_ result: SKTRESULT) {
         print("Receive a ScanApi error: \(result)")
     }
 
-    func onErrorRetrievingScanObject(result: SKTRESULT) {
+    func onErrorRetrievingScanObject(_ result: SKTRESULT) {
         print("Receive a ScanApi error while retrieving a ScanObject: \(result)")
     }
 
-    func onScanApiInitializeComplete(result: SKTRESULT) {
+    func onScanApiInitializeComplete(_ result: SKTRESULT) {
         print("Result of ScanAPI initialization: \(result)")
     }
 

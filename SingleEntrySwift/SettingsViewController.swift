@@ -16,15 +16,15 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        ScanApiHelper.sharedScanApiHelper().pushDelegate(self)
+        ScanApiHelper.shared().push(self)
         // Do any additional setup after loading the view.
         
         // retrieve the current status of SoftScan
-        ScanApiHelper.sharedScanApiHelper().postGetSoftScanStatus(self, response: #selector(SettingsViewController.onGetSoftScanStatus(_:)))
+        ScanApiHelper.shared().postGetSoftScanStatus(self, response: #selector(SettingsViewController.onGetSoftScanStatus(_:)))
     }
 
-    override func viewDidDisappear(animated: Bool) {
-        ScanApiHelper.sharedScanApiHelper().popDelegate(self)
+    override func viewDidDisappear(_ animated: Bool) {
+        ScanApiHelper.shared().pop(self)
     }
     
     override func didReceiveMemoryWarning() {
@@ -33,14 +33,14 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     }
     
 
-    @IBAction func changeSoftScan(sender: AnyObject) {
-        if(!softscan.on){
+    @IBAction func changeSoftScan(_ sender: AnyObject) {
+        if(!softscan.isOn){
             print("disabling SoftScan...")
-            ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanDisableSoftScan), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
+            ScanApiHelper.shared().postSetSoftScanStatus(UInt8(kSktScanDisableSoftScan), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
         }
         else{
             print("enabling SoftScan...")
-            ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanEnableSoftScan), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
+            ScanApiHelper.shared().postSetSoftScanStatus(UInt8(kSktScanEnableSoftScan), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
         }
     }
     
@@ -55,26 +55,26 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     */
     
     // MARK: - ScanApiHelper results
-    func onGetSoftScanStatus(scanObj: ISktScanObject!) {
+    func onGetSoftScanStatus(_ scanObj: ISktScanObject!) {
         print("onGetSoftScanStatus received!")
-        let result = scanObj.Msg().Result()
+        let result = scanObj.msg().result()
         print("Result:", result)
         if(result == ESKT_NOERROR){
-            let status = Int(scanObj.Property().getByte())
+            let status = Int(scanObj.property().getByte())
             print("receive SoftScan status:",status)
             if ( status == kSktScanEnableSoftScan){
-                softscan.on = true
+                softscan.isOn = true
             }
             else{
-                softscan.on = false
+                softscan.isOn = false
                 if(status == kSktScanSoftScanNotSupported){
-                    ScanApiHelper.sharedScanApiHelper().postSetSoftScanStatus(UInt8(kSktScanSoftScanSupported), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
+                    ScanApiHelper.shared().postSetSoftScanStatus(UInt8(kSktScanSoftScanSupported), target: self, response: #selector(SettingsViewController.onSetSoftScanStatus(_:)))
                 }
             }
         }
     }
     
-    func onSetSoftScanStatus(scanObj: ISktScanObject){
+    func onSetSoftScanStatus(_ scanObj: ISktScanObject){
         
     }
     
@@ -84,7 +84,7 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     * @param result contains the result of the connection
     * @param newDevice contains the device information
     */
-    func onDeviceArrival(result: SKTRESULT, device deviceInfo: DeviceInfo!) {
+    func onDeviceArrival(_ result: SKTRESULT, device deviceInfo: DeviceInfo!) {
         print("Settings: Device Arrival")
     }
     
@@ -92,7 +92,7 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     * called each time a device disconnect from the host
     * @param deviceRemoved contains the device information
     */
-    func onDeviceRemoval(deviceRemoved: DeviceInfo!) {
+    func onDeviceRemoval(_ deviceRemoved: DeviceInfo!) {
         print("Settings: Device Removal")
     }
     
