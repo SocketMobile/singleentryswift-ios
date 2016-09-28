@@ -16,6 +16,7 @@
 		679FF04B1A1A83C900510266 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 679FF0491A1A83C900510266 /* LaunchScreen.xib */; };
 		679FF0571A1A83C900510266 /* SingleEntrySwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 679FF0561A1A83C900510266 /* SingleEntrySwiftTests.swift */; };
 		E744CF421BDFDD700090F8C0 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E744CF411BDFDD700090F8C0 /* SettingsViewController.swift */; };
+		E7B2669A1D94130E00A49830 /* ScanApiHelperExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B266991D94130E00A49830 /* ScanApiHelperExtension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,7 @@
 		679FF0561A1A83C900510266 /* SingleEntrySwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleEntrySwiftTests.swift; sourceTree = "<group>"; };
 		67E0EDD41A2FA97500391E18 /* SingleEntrySwift-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SingleEntrySwift-Bridging-Header.h"; sourceTree = "<group>"; };
 		E744CF411BDFDD700090F8C0 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		E7B266991D94130E00A49830 /* ScanApiHelperExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanApiHelperExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				679FF0471A1A83C900510266 /* Images.xcassets */,
 				679FF0491A1A83C900510266 /* LaunchScreen.xib */,
 				679FF03C1A1A83C900510266 /* Supporting Files */,
+				E7B266991D94130E00A49830 /* ScanApiHelperExtension.swift */,
 			);
 			path = SingleEntrySwift;
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				679FF0411A1A83C900510266 /* MasterViewController.swift in Sources */,
 				679FF03F1A1A83C900510266 /* AppDelegate.swift in Sources */,
 				E744CF421BDFDD700090F8C0 /* SettingsViewController.swift in Sources */,
+				E7B2669A1D94130E00A49830 /* ScanApiHelperExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +448,11 @@
 			baseConfigurationReference = 0CC22947451789A0FF546F0F /* Pods-SingleEntrySwift.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HOST_ACKNOWLEDGMENT=1",
+				);
 				INFOPLIST_FILE = SingleEntrySwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -454,6 +463,7 @@
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/ScanAPI\"",
 				);
+				OTHER_SWIFT_FLAGS = "-DNO_HOST_ACKNOWLEDGMENT";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.socketmobile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -467,6 +477,11 @@
 			baseConfigurationReference = 198D94E4448B92BDF5CED8A3 /* Pods-SingleEntrySwift.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					"HOST_ACKNOWLEDGMENT=1",
+				);
 				INFOPLIST_FILE = SingleEntrySwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
@@ -477,6 +492,7 @@
 					"-isystem",
 					"\"${PODS_ROOT}/Headers/Public/ScanAPI\"",
 				);
+				OTHER_SWIFT_FLAGS = "-DNO_HOST_ACKNOWLEDGMENT";
 				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.socketmobile.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";

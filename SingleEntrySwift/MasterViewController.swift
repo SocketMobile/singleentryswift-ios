@@ -16,6 +16,14 @@
 //  AVFoundation.framework
 //  And of course libScanAPI.a
 //
+//  NOTE ABOUT THE HOST ACKNOWLEDGMENT
+//  This sample app shows how the Host application can Acknowledge the decoded data
+//  To activate this feature go to the project settings and in the "Other Swift Flags"
+//  rename this "-DNO_HOST_ACKNOWLEDGMENT" to this "-DHOST_ACKNOWLEDGMENT"
+//  If your application does not require Acknowledgment then every thing that is related
+//  to configuring ScanAPI or the Scanner for Local Acknowledgment can be safely ignored
+//  because the Scanner comes setup to Local Acknowledgment by default. (Local Acknowledgment
+//  means the decoded data gets acknowledged in the Scanner, and then they are sent to the host).
 //
 //  Created by Eric Glaenzer on 11/17/14.
 // Copyright 2015 Socket Mobile, Inc.
@@ -149,11 +157,21 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
     // MARK: - ScanApiHelperDelegate
 
     func onDeviceArrival(_ result: SKTRESULT, device deviceInfo: DeviceInfo!) {
-        print("Main view device arrival:\(deviceInfo.getName())")
+        print("Main view device arrival:\(deviceInfo.getName() as String)")
+        // These few lines are only for the Host Acknowledgment feature,
+        // if your application does not use this feature they can be removed
+        // from the #if to the #endif
+        #if HOST_ACKNOWLEDGMENT
+            scanApiHelper?.postGetLocalAcknowledgmentDevice(deviceInfo, target: self, response: #selector(onGetLocalAcknowledgment(_:)))
+            scanApiHelper?.postGetDecodeActionDevice(deviceInfo, target: self, response: #selector(onGetDecodeAction(_:)))
+        #else // to remove the Host Acknowledgment if it was set before
+            scanApiHelper?.postGetLocalAcknowledgmentDevice(deviceInfo, target: self, response: #selector(onGetLocalAcknowledgmentLocalAck(_:)))
+            scanApiHelper?.postGetDecodeActionDevice(deviceInfo, target: self, response: #selector(onGetDecodeActionLocalAck(_:)))
+        #endif
     }
 
     func onDeviceRemoval(_ deviceRemoved: DeviceInfo!) {
-        print("Main view device removal:\(deviceRemoved.getName())")
+        print("Main view device removal:\(deviceRemoved.getName() as String)")
     }
 
     // if the onDecodedDataResult is used then this onDecodedData
@@ -181,6 +199,9 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
             let str = NSString(data: data, encoding: String.Encoding.utf8.rawValue)
             let string = str as! String
             print("Decoded Data \(string)")
+            #if HOST_ACKNOWLEDGMENT
+                scanApiHelper?.postSetDataConfirmation(device, goodData: true, target: self, response: #selector(onSetDataConfirmation(_:)));
+            #endif
         }
     }
 
@@ -194,9 +215,121 @@ class MasterViewController: UITableViewController,ScanApiHelperDelegate {
 
     func onScanApiInitializeComplete(_ result: SKTRESULT) {
         print("Result of ScanAPI initialization: \(result)")
+        // if you don't need host Acknowledgment, and use the
+        // scanner acknowledgment, then these few lines can be 
+        // removed (from the #if to the #endif)
+        #if HOST_ACKNOWLEDGMENT
+            let mode = UInt8(kSktScanDataConfirmationModeApp.rawValue)
+             scanApiHelper?.postSetConfirmationMode(mode, target: self, response: #selector(onSetDataConfirmationMode(_ :)))
+        #else  // to remove the Host Acknowledgment if it was set before
+            // put back to the default Scanner Acknowledgment also called Local Acknowledgment
+            let mode = UInt8(kSktScanDataConfirmationModeDevice.rawValue)
+            scanApiHelper?.postSetConfirmationMode(mode, target: self, response: #selector(onSetDataConfirmationMode(_ :)))
+        #endif
     }
 
     func onScanApiTerminated() {
         print("ScanAPI has terminated")
     }
+    
+    // the following lines are only for the case of a host Acknowledgment
+    // If your application does not use this feature, then they can be removed
+    // from the #if to the #endif
+    #if HOST_ACKNOWLEDGMENT
+    
+    func onSetDataConfirmationMode(_ scanObject:ISktScanObject) {
+        let result = scanObject.msg().result()
+        print("Data Confirmation Mode returns : \(result)")
+    }
+    
+    func onSetDataConfirmation(_ scanObject:ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result != ESKT_NOERROR){
+            print("Set Data Confirmation returns: \(result)")
+        }
+    }
+    
+    func onGetLocalAcknowledgment(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result == ESKT_NOERROR){
+            let deviceInfo = scanApiHelper?.getDeviceInfo(from: scanObject)
+            var localAck = scanObject.property().getByte()
+            if localAck == UInt8(kSktScanDeviceDataAcknowledgmentOn.rawValue) {
+                localAck = UInt8(kSktScanDeviceDataAcknowledgmentOff.rawValue)
+                scanApiHelper?.postSetLocalAcknowledgmentDevice(deviceInfo, localAcknowledgment: localAck, target: self, response: #selector(onSetLocalAcknowledgment(_:)))
+            }
+        }
+    }
+
+    func onSetLocalAcknowledgment(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result != ESKT_NOERROR){
+            print("Set Local Acknowledgment returs: \(result)")
+        }
+    }
+    
+    func onGetDecodeAction(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result == ESKT_NOERROR){
+            let deviceInfo = scanApiHelper?.getDeviceInfo(from: scanObject)
+            var decodeAction = scanObject.property().getByte()
+            if decodeAction != UInt8(kSktScanLocalDecodeActionNone){
+                decodeAction = UInt8(kSktScanLocalDecodeActionNone)
+                scanApiHelper?.postSetDecodeActionDevice(deviceInfo, decodeAction: Int32(decodeAction), target: self, response: #selector(onSetDecodeAction(_:)))
+            }
+        }
+    }
+    
+    func onSetDecodeAction(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result != ESKT_NOERROR){
+            print("Set Decode Action returs: \(result)")
+        }
+    }
+    
+#else // to remove the Host Acknowledgment if it was set before
+    func onSetDataConfirmationMode(_ scanObject:ISktScanObject) {
+        let result = scanObject.msg().result()
+        print("Data Confirmation Mode returns : \(result)")
+    }
+    
+    func onSetDecodeAction(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result != ESKT_NOERROR){
+            print("Set Decode Action returs: \(result)")
+        }
+    }
+    
+    func onGetDecodeActionLocalAck(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result == ESKT_NOERROR){
+            let deviceInfo = scanApiHelper?.getDeviceInfo(from: scanObject)
+            var decodeAction = scanObject.property().getByte()
+            if decodeAction == UInt8(kSktScanLocalDecodeActionNone){
+                decodeAction = UInt8(kSktScanLocalDecodeActionBeep|kSktScanLocalDecodeActionFlash|kSktScanLocalDecodeActionRumble)
+                scanApiHelper?.postSetDecodeActionDevice(deviceInfo, decodeAction: Int32(decodeAction), target: self, response: #selector(onSetDecodeAction(_:)))
+            }
+        }
+    }
+    
+    func onSetLocalAcknowledgment(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result != ESKT_NOERROR){
+            print("Set Local Acknowledgment returs: \(result)")
+        }
+    }
+    
+    func onGetLocalAcknowledgmentLocalAck(_ scanObject: ISktScanObject) {
+        let result = scanObject.msg().result()
+        if(result == ESKT_NOERROR){
+            let deviceInfo = scanApiHelper?.getDeviceInfo(from: scanObject)
+            var localAck = scanObject.property().getByte()
+            if localAck == UInt8(kSktScanDeviceDataAcknowledgmentOff.rawValue) {
+                localAck = UInt8(kSktScanDeviceDataAcknowledgmentOn.rawValue)
+                scanApiHelper?.postSetLocalAcknowledgmentDevice(deviceInfo, localAcknowledgment: localAck, target: self, response: #selector(onSetLocalAcknowledgment(_:)))
+            }
+        }
+    }
+    
+#endif
 }

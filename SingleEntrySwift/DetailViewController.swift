@@ -130,9 +130,23 @@ class DetailViewController: UIViewController,ScanApiHelperDelegate {
             let string = str as! String
             print("Decoded Data \(string)")
             self.decodedData.text = string
+            // this code can be removed if the application is not interested by
+            // the host Acknowledgment for the decoded data
+            #if HOST_ACKNOWLEDGMENT
+                ScanApiHelper.shared().postSetDataConfirmationOkDevice(device, target: self, response: #selector(onSetDataConfirmation(_:)))
+            #endif
         }
     }
-
+    
+    #if HOST_ACKNOWLEDGMENT
+    func onSetDataConfirmation(_ scanObj: ISktScanObject){
+        let result = scanObj.msg().result()
+        if result != ESKT_NOERROR {
+            print("error trying to confirm the decoded data: \(result)")
+        }
+    }
+    #endif
+    
     // since we use ScanApiHelper in shared mode, we receive a device Arrival
     // each time this view becomes active and there is a scanner connected
     func onDeviceArrival(_ result: SKTRESULT, device deviceInfo: DeviceInfo!) {
