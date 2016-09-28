@@ -113,3 +113,15 @@ ScanApiHelper to the extended one.
 
 Following this recommendation will prevent to loose the modifications at the
 next update.
+
+An example of this *ScanApiHelper extension* is shown in the
+ScanApiHelperExtension.swift
+
+# Host Acknowledgment
+For some application it might be required to check the decoded data before
+letting the user scanning more barcodes.
+This feature is shown with the code enclosed in #if HOST_ACKNOWLEDGMENT
+statement.
+
+To activate this feature go to the project settings and in the "Other Swift
+Flags" rename this "-DNO_HOST_ACKNOWLEDGMENT" to this "-DHOST_ACKNOWLEDGMENT".
