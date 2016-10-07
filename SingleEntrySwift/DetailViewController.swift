@@ -18,6 +18,7 @@
 // limitations under the License.
 
 import UIKit
+import ScanAPI
 
 class DetailViewController: UIViewController,ScanApiHelperDelegate {
     let noScannerConnected = "No scanner connected"

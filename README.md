@@ -45,6 +45,56 @@ cd SingleEntrySwift
 nano Podfile
 pod install
 ```
+## Remarks about Podfile
+There are 2 ways to include ScanAPI Cocoapods in a Swift project.
+
+### using use_frameworks!
+If your project includes more than one Cocopods, and in particular, Frameworks
+type of CocoaPods, then the Podfile should use the `use_frameworks` setting.
+In this configuration the source files using ScanAPI should include a
+`import ScanAPI` at the beginning of the source file.
+There is no need of a Bridging Header file.
+Here is an example of such Podfile:
+```
+
+def import_pods
+  use_frameworks!
+  pod "ScanAPI", :path=> "../ScanApiSDK-10.3.55"
+end
+
+platform :ios, '7.1'
+target 'SingleEntrySwift'
+import_pods
+
+```
+
+The source file using ScanApiHelper could look like this:
+```
+import UIKit
+import ScanAPI
+
+class DetailViewController: UIViewController,ScanApiHelperDelegate {
+    let noScannerConnected = "No scanner connected"
+    var scanners : [NSString] = []  // keep a list of scanners to display in the status
+    var softScanner : DeviceInfo?  // keep a reference on the SoftScan Scanner
+
+...
+```
+
+
+### using Bridging Header file
+Since ScanAPI CocoaPods is a Objective-C static library, a bridging header file
+must be specified and should import ScanApiHelper.h file. That bridging header
+file must be specified in the application project settings.
+
+The source files using ScanApiHelper don't need to include anything in that case.
+The Bridging Header file could be as simple as this:
+```
+
+#import "ScanApiHelper.h"
+
+```
+
 ## IMPORTANT NOTES
 In Xcode the debug information format in the build options is set by default to
 'DWARF with DSYM file'. This is causing numerous warnings. It is recommended to

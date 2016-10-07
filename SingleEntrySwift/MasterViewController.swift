@@ -42,7 +42,7 @@
 //
 //
 import UIKit
-
+import ScanAPI
 
 class MasterViewController: UITableViewController,ScanApiHelperDelegate {
 

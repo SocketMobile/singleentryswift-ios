@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ScanAPI
 
 class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     var detailItem: AnyObject?

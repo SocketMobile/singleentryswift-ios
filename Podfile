@@ -1,5 +1,6 @@
 
 def import_pods
+  use_frameworks!
   pod "ScanAPI", :path=> "../ScanApiSDK-10.3.55"
 end
 
