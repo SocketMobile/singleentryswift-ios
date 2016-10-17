@@ -44,7 +44,6 @@
 		679FF0501A1A83C900510266 /* SingleEntrySwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SingleEntrySwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		679FF0551A1A83C900510266 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		679FF0561A1A83C900510266 /* SingleEntrySwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleEntrySwiftTests.swift; sourceTree = "<group>"; };
-		67E0EDD41A2FA97500391E18 /* SingleEntrySwift-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SingleEntrySwift-Bridging-Header.h"; sourceTree = "<group>"; };
 		E744CF411BDFDD700090F8C0 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		E7B266991D94130E00A49830 /* ScanApiHelperExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScanApiHelperExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,7 +70,6 @@
 		679FF0301A1A83C900510266 = {
 			isa = PBXGroup;
 			children = (
-				67E0EDD41A2FA97500391E18 /* SingleEntrySwift-Bridging-Header.h */,
 				679FF03B1A1A83C900510266 /* SingleEntrySwift */,
 				679FF0531A1A83C900510266 /* SingleEntrySwiftTests */,
 				679FF03A1A1A83C900510266 /* Products */,
