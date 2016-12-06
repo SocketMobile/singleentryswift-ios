@@ -13,6 +13,7 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     var detailItem: AnyObject?
 
     @IBOutlet weak var softscan: UISwitch!
+    @IBOutlet weak var scanApiVersion: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,9 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
         
         // retrieve the current status of SoftScan
         ScanApiHelper.shared().postGetSoftScanStatus(self, response: #selector(SettingsViewController.onGetSoftScanStatus(_:)))
+        
+        // ask for the ScanAPI version
+        ScanApiHelper.shared().postGetScanApiVersion(self, response: #selector(SettingsViewController.onGetScanApiVersion(_:)))
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -77,6 +81,21 @@ class SettingsViewController: UIViewController, ScanApiHelperDelegate{
     
     func onSetSoftScanStatus(_ scanObj: ISktScanObject){
         
+    }
+    
+    func onGetScanApiVersion(_ scanObj: ISktScanObject!) {
+        print("onGetScanApiVersion received!")
+        let result = scanObj.msg().result()
+        print("Result:", result)
+        if(result == ESKT_NOERROR){
+            let version = scanObj.property().version()!
+            let major = String(format:"%x",version.getMajor())
+            let middle = String(format:"%x",version.getMiddle())
+            let minor = String(format:"%x",version.getMinor())
+            let build = String(format:"%x",version.getBuild())
+            print("receive ScanAPI version: \(major).\(middle).\(minor)")
+            scanApiVersion.text = "ScanAPI: \(major).\(middle).\(minor).\(build)"
+        }
     }
     
     // MARK: - ScanApiHelper Delegates
