@@ -2,6 +2,15 @@
 This simple iOS app is a sample code for using ScanAPI SDK with a Swift
 application.
 
+## IMPORTANT
+Our Barcode Bluetooth Scanners are using External Accessory Framework. It is
+very important to make sure your application info plist file contains in the
+Supported External Accessory protocol string array our Scanner protocol string
+which is `com.socketmobile.chs`. In the previous version of Xcode it used to
+give an error message in the traces but that is no longer the case with the most
+recent version of Xcode.
+
+
 ## Prerequisites
 This SDK uses CocoaPods. If it needs to be installed please check the CocoaPods
 website for the most current instructions:
